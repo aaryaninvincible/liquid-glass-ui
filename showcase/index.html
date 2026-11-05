@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BeatWave Liquid Glass UI Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- SVG Gooey & Optical Refraction Filter Defs -->
+  <svg class="gooey-filter-defs" style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true">
+    <defs>
+      <!-- Liquid Jelly Metaball Surface Tension Filter -->
+      <filter id="liquid-goo">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="
+          1 0 0 0 0
+          0 1 0 0 0
+          0 0 1 0 0
+          0 0 0 20 -9" result="goo" />
+        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+      </filter>
+
+      <!-- Dynamic Liquid Lens Refractive Depth Warp Filter -->
+      <filter id="liquid-depth-warp" x="-25%" y="-25%" width="150%" height="150%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="3" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+        <feGaussianBlur in="displaced" stdDeviation="0.3" result="blurred" />
+        <feBlend in="SourceGraphic" in2="blurred" mode="normal" />
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- Dynamic Ambient Animated Background -->
+  <div class="ambient-mesh">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+    <div class="glow-orb orb-4"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Top Header -->
+    <header class="top-nav">
+      <div class="brand">
+        <div class="liquid-logo-badge">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/>
+          </svg>
+        </div>
+        <div>
+          <h1>BeatWave <span>Liquid Glass</span></h1>
+          <p class="subtitle">Reverse-Engineered Android AGSL & Compose Glass Architecture</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Theme & Screen Mode Toggle: User Match (Queen) vs APK Blush vs Deep Midnight -->
+        <div class="theme-switch-group">
+          <button class="theme-switch-btn active" id="btnThemeQueen" title="Exact match to user's uploaded image (Dark Queen Songs + Refracted Library Lens)">
+            🎯 User's Match (Queen)
+          </button>
+          <button class="theme-switch-btn" id="btnThemePeach" title="Signature Blush Theme (Official BeatWave Default)">
+            🌸 Signature Blush (APK)
+          </button>
+          <button class="theme-switch-btn" id="btnThemeDark" title="Deep Midnight Theme">
+            🌙 Deep Midnight
+          </button>
+        </div>
+
+        <!-- Real APK Compare Trigger Button -->
+        <button class="liquid-btn compare-btn" id="btnOpenCompare">
+          📸 Compare with Real APK
+        </button>
+
+        <span class="badge-pill tier-badge" id="tierBadge">Tier: High (AGSL + Dispersion)</span>
+        <a href="https://github.com/vortexapps67/BeatWave" target="_blank" class="liquid-btn small-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          Original Repo
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="workspace-grid">
+      
+      <!-- Interactive Phone Mockup / Live Surface -->
+      <section class="stage-section">
+        <div class="stage-header-bar">
+          <div class="stage-title-wrap">
+            <span class="live-indicator-dot"></span>
+            <span class="stage-title">BeatWave Liquid Glass Preview</span>
+          </div>
+          <span class="stage-hint">Hover / Drag the liquid lens on bottom bar</span>
+        </div>
+
+        <div class="phone-frame theme-midnight" id="phoneMockupFrame">
+          
+          <!-- Phone Status Bar -->
+          <div class="phone-status-bar">
+            <span class="status-time">5:37</span>
+            <div class="status-icons">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"/></svg>
+              <div class="status-battery"><div class="battery-fill"></div></div>
+            </div>
+          </div>
+
+          <div class="screen-content">
+
+            <!-- ==============================================
+                 SCREEN 0: USER SCREENSHOT MATCH (1:1 with media_1792580007536.png)
+                 Dark song list with Queen mini player and Take Your Halo Off behind the tab bar
+                 ============================================== -->
+            <div class="app-screen-view active-screen" id="screenQueen">
+              <div class="screen-scroll-body user-song-scroll">
+                <div class="song-list-container">
+                  <div class="song-items-list" id="songItemsList">
+                    <!-- Track 1: breakaway -->
+                    <div class="song-row" data-song="0">
+                      <div class="song-thumb">
+                        <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=120&auto=format&fit=crop&q=80" alt="breakaway">
+                      </div>
+                      <div class="song-meta">
+                        <h4>breakaway</h4>
+                        <p>Kelly Clarkson • 3:57</p>
+                      </div>
+                      <button class="more-btn">⋮</button>
+                    </div>
+
+                    <!-- Track 2: Queen Under Pressure -->
+                    <div class="song-row active-row" data-song="1">
+                      <div class="song-thumb queen-art-thumb">
+                        <div class="q-block q-red"></div>
+                        <div class="q-block q-blue"></div>
+                        <div class="q-block q-green"></div>
+                        <div class="q-block q-yellow"></div>
+                      </div>
+                      <div class="song-meta">
+                        <h4 class="now-playing-title">Under Pressure (...</h4>
+                        <p>Queen • 4:08</p>
+                      </div>
+                      <div class="row-playing-indicator">
+                        <span></span><span></span><span></span>
+                      </div>
+                    </div>
+
+                    <!-- Track 3: Take Your Halo Off (Directly under the top rim of the droplet in user's image!) -->
+                    <div class="song-row song-refracted-halo" data-song="2">
+                      <div class="song-thumb">
+                        <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=120&auto=format&fit=crop&q=80" alt="Tech N9ne">
+                      </div>
+                      <div class="song-meta">
+                        <h4>Take Your Halo Off</h4>
+                        <p>Tech N9ne • 3:49</p>
+                      </div>
+                      <button class="more-btn">⋮</button>
+                    </div>
+
+                    <!-- Track 4: Aashiqui 2 Mashup (Directly under the bottom rim of the droplet in user's image!) -->
+                    <div class="song-row" data-song="3">
+                      <div class="song-thumb">
+                        <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=120&auto=format&fit=crop&q=80" alt="Aashiqui 2">
+                      </div>
+                      <div class="song-meta">
+                        <h4>Aashiqui 2 Mashup</h4>
+                        <p>Mithoon, Pritam, Mustafa Zahid...</p>
+                      </div>
+                      <button class="more-btn">⋮</button>
+                    </div>
+
+                    <!-- Track 5: Starboy -->
+                    <div class="song-row" data-song="4">
+                      <div class="song-thumb">
+                        <img src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=120&auto=format&fit=crop&q=80" alt="Starboy">
+                      </div>
+                      <div class="song-meta">
+                        <h4>Starboy</h4>
+                        <p>The Weeknd, Daft Punk • 3:50</p>
+                      </div>
+                      <button class="more-btn">⋮</button>
+                    </div>
+
+                    <!-- Track 6: Resonance -->
+                    <div class="song-row" data-song="5">
+                      <div class="song-thumb">
+                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=120&auto=format&fit=crop&q=80" alt="Resonance">
+                      </div>
+                      <div class="song-meta">
+                        <h4>Resonance</h4>
+                        <p>HOME • 3:32</p>
+                      </div>
+                      <button class="more-btn">⋮</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ==============================================
+                 SCREEN 1: HOME (Exact match to beatwave_clean.png)
+                 ============================================== -->
+            <div class="app-screen-view" id="screenHome">
+              <div class="screen-scroll-body">
+                <!-- Top Header -->
+                <div class="bw-home-header">
+                  <h1 class="bw-brand-text">BeatWave</h1>
+                  <button class="bw-icon-btn" id="homeSettingsShortcut" title="Settings">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Greeting Section -->
+                <div class="bw-greeting-row">
+                  <div>
+                    <div class="bw-mix-tag">
+                      <span class="eq-icon"><span></span><span></span><span></span></span>
+                      AFTERNOON MIX
+                    </div>
+                    <h2 class="bw-greeting-title">Good afternoon</h2>
+                    <p class="bw-greeting-sub">Keep the energy flow going</p>
+                  </div>
+                  <div class="bw-avatar-circle" title="User Profile">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                  </div>
+                </div>
+
+                <!-- Horizontal Filter Chips -->
+                <div class="bw-filter-chips">
+                  <button class="bw-chip active">✓ All</button>
+                  <button class="bw-chip">Podcasts</button>
+                  <button class="bw-chip">Romance</button>
+                  <button class="bw-chip">Relax</button>
+                  <button class="bw-chip">Feel good</button>
+                </div>
+
+                <!-- Section: Your daily discover -->
+                <div class="bw-section-header">
+                  <h3>Your daily discover</h3>
+                  <button class="bw-play-all-btn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    Play all
+                  </button>
+                </div>
+
+                <!-- Hero Discover Card Carousel (1:1 with Mismatched Netflix Card in beatwave_clean.png) -->
+                <div class="bw-discover-carousel">
+                  <div class="bw-discover-card hero-mismatched">
+                    <div class="bw-card-badge">
+                      <span class="badge-dot"></span>
+                      <span>DISCOVER</span>
+                      <span class="badge-divider">•</span>
+                      <span class="badge-sub">SOUNDTRACK FROM THE NETFLIX SERIES</span>
+                    </div>
+
+                    <!-- Mismatched Cast Graphic Background -->
+                    <div class="bw-hero-art">
+                      <div class="art-layer art-mismatched-visual">
+                        <div class="art-heart-bg"></div>
+                        <div class="art-character c1"></div>
+                        <div class="art-character c2"></div>
+                        <div class="art-character c3"></div>
+                      </div>
+                    </div>
+
+                    <!-- Frosted Bottom Details Bar with Glass Play Orb -->
+                    <div class="bw-card-frosted-bar">
+                      <div class="bw-card-track-info">
+                        <h4>Kho Gaye</h4>
+                        <p class="track-artist">Taaruk Raina, Mismatched - Cast</p>
+                        <p class="track-rec">Similar to Spotify Discovery • Recommended</p>
+                      </div>
+                      <button class="bw-card-play-orb" title="Play Kho Gaye">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                          <polygon points="6 4 18 12 6 20 6 4"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Peeking Second Card -->
+                  <div class="bw-discover-card bw-card-peek">
+                    <div class="peek-bg"></div>
+                    <div class="peek-footer">
+                      <h4>Discovery</h4>
+                      <p>Top Mix</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Section: Trending community playlists -->
+                <div class="bw-section-header" style="margin-top: 24px;">
+                  <h3>Trending community playlists</h3>
+                  <button class="bw-mic-btn" title="Voice Search">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                      <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Trending Playlists Mini Grid -->
+                <div class="bw-trending-grid">
+                  <div class="bw-playlist-thumb-card">
+                    <div class="thumb-cover tc-1">
+                      <div class="cover-inner-text">Murder 2</div>
+                    </div>
+                    <span>Emraan Hashmi Hits</span>
+                  </div>
+                  <div class="bw-playlist-thumb-card">
+                    <div class="thumb-cover tc-2">
+                      <div class="cover-inner-text">KK Memories</div>
+                    </div>
+                    <span>Pritam Classics</span>
+                  </div>
+                  <div class="bw-playlist-thumb-card">
+                    <div class="thumb-cover tc-3">
+                      <div class="cover-inner-text">Soulful Acoustic</div>
+                    </div>
+                    <span>Chill Vibes</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ==============================================
+                 SCREEN 2: LIBRARY (Exact match to library_tab.png & puck_held.png)
+                 ============================================== -->
+            <div class="app-screen-view" id="screenLibrary">
+              <div class="screen-scroll-body">
+                <div class="bw-home-header">
+                  <h1 class="bw-brand-text">Library</h1>
+                  <button class="bw-icon-btn" title="Settings">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                    </svg>
+                  </button>
+                </div>
+
+                <h2 class="bw-large-title">Playlists</h2>
+
+                <!-- Sub Navigation Pills -->
+                <div class="bw-filter-chips">
+                  <button class="bw-chip active">✓ Playlists</button>
+                  <button class="bw-chip">Songs</button>
+                  <button class="bw-chip">Albums</button>
+                </div>
+
+                <!-- Sorting and View Controls Row -->
+                <div class="bw-library-action-row">
+                  <div class="bw-sort-pill">
+                    <span>Date added</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 14l5-5 5 5z"/></svg>
+                  </div>
+                  <span class="bw-count-label">0 playlists</span>
+                  <div class="bw-view-toggles">
+                    <button class="bw-small-icon-btn" title="List View">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                    </button>
+                    <button class="bw-small-icon-btn active" title="Grid View">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- 5 Signature Quick Action Glass Cards (Matching library_tab.png 1:1) -->
+                <div class="bw-library-grid">
+                  <!-- Liked -->
+                  <div class="bw-lib-card">
+                    <div class="bw-lib-card-icon">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                      </svg>
+                    </div>
+                    <span class="bw-lib-card-label">Liked</span>
+                  </div>
+
+                  <!-- Downloaded -->
+                  <div class="bw-lib-card">
+                    <div class="bw-lib-card-icon">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="8 12 12 16 16 12"/>
+                        <line x1="12" y1="8" x2="12" y2="16"/>
+                      </svg>
+                    </div>
+                    <span class="bw-lib-card-label">Downloaded</span>
+                  </div>
+
+                  <!-- My top 50 -->
+                  <div class="bw-lib-card">
+                    <div class="bw-lib-card-icon">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                        <polyline points="17 6 23 6 23 12"/>
+                      </svg>
+                    </div>
+                    <span class="bw-lib-card-label">My top 50</span>
+                  </div>
+
+                  <!-- Cached -->
+                  <div class="bw-lib-card">
+                    <div class="bw-lib-card-icon">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                      </svg>
+                    </div>
+                    <span class="bw-lib-card-label">Cached</span>
+                  </div>
+
+                  <!-- Uploaded -->
+                  <div class="bw-lib-card">
+                    <div class="bw-lib-card-icon">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 16l-4-4-4 4M12 12v9M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+                        <polyline points="16 16 12 12 8 16"/>
+                      </svg>
+                    </div>
+                    <span class="bw-lib-card-label">Uploaded</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ==============================================
+                 SCREEN 3: SETTINGS (Exact match to real_apk_settings.png)
+                 ============================================== -->
+            <div class="app-screen-view" id="screenSettings">
+              <div class="screen-scroll-body">
+                <div class="bw-settings-header">
+                  <button class="bw-icon-btn back-btn" id="btnSettingsBack" title="Back">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="19" y1="12" x2="5" y2="12"/>
+                      <polyline points="12 19 5 12 12 5"/>
+                    </svg>
+                  </button>
+                  <h1 class="bw-brand-text">Settings</h1>
+                </div>
+
+                <!-- Settings Search Pill -->
+                <div class="bw-settings-search">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  </svg>
+                  <span>Search</span>
+                </div>
+
+                <!-- Section: GENERAL -->
+                <div class="bw-settings-group">
+                  <span class="bw-group-title">GENERAL</span>
+                  
+                  <div class="bw-setting-row">
+                    <div class="bw-row-icon icon-blue">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
+                    </div>
+                    <div class="bw-row-label">
+                      <span>System update</span>
+                    </div>
+                    <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                  </div>
+
+                  <div class="bw-setting-row" id="settingRowAppearance" style="cursor: pointer;">
+                    <div class="bw-row-icon icon-purple">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L12 22l7.03-4.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9zm0 13c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>
+                    </div>
+                    <div class="bw-row-label">
+                      <span>Appearance</span>
+                    </div>
+                    <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                  </div>
+
+                  <div class="bw-setting-row">
+                    <div class="bw-row-icon icon-red">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    </div>
+                    <div class="bw-row-label">
+                      <span>Player and audio</span>
+                    </div>
+                    <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                  </div>
+                </div>
+
+                <!-- Section: ACCOUNT -->
+                <div class="bw-settings-group">
+                  <span class="bw-group-title">ACCOUNT</span>
+
+                  <div class="bw-setting-row">
+                    <div class="bw-row-icon icon-green">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    </div>
+                    <div class="bw-row-label">
+                      <span>Account</span>
+                    </div>
+                    <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                  </div>
+
+                  <div class="bw-setting-row">
+                    <div class="bw-row-icon icon-teal">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+                    </div>
+                    <div class="bw-row-label">
+                      <span>Offline Sync</span>
+                    </div>
+                    <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                  </div>
+                </div>
+
+                <!-- Theme Presets (Matching deep_midnight.png) -->
+                <div class="bw-settings-group">
+                  <span class="bw-group-title">THEME QUICK TOGGLE</span>
+                  <div class="bw-theme-preset-pills">
+                    <button class="bw-preset-pill active" id="pillSelectPeach">🌸 Signature Blush</button>
+                    <button class="bw-preset-pill" id="pillSelectMidnight">🌌 Deep Midnight</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Floating Mini Player Pill (Docked above Bottom Bar) -->
+            <div class="floating-mini-player" id="floatingMiniPlayer">
+              <div class="mini-art queen-art-thumb">
+                <div class="q-block q-red"></div>
+                <div class="q-block q-blue"></div>
+                <div class="q-block q-green"></div>
+                <div class="q-block q-yellow"></div>
+              </div>
+              
+              <div class="mini-meta" id="miniPlayerExpandBtn" title="Click to view full player">
+                <h4 id="miniTitle">Kho Gaye</h4>
+                <p id="miniArtist">Taaruk Raina</p>
+              </div>
+
+              <!-- Animated Waveform Visualizer Dots -->
+              <div class="mini-waveform">
+                <div class="wave-dot"></div><div class="wave-dot"></div><div class="wave-dot"></div>
+                <div class="wave-dot"></div><div class="wave-dot"></div><div class="wave-dot"></div>
+                <div class="wave-dot"></div><div class="wave-dot"></div>
+              </div>
+
+              <!-- Mini Controls -->
+              <div class="mini-controls">
+                <button class="mini-btn play-mini-btn" id="miniPlayBtn" title="Play / Pause">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" id="miniPlayIcon">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                  </svg>
+                </button>
+                <button class="mini-btn" id="miniNextBtn" title="Next">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 4 15 12 5 20 5 4"/>
+                    <line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Floating Navigation Bar Row (Signature BeatWave Liquid Bar + Search) -->
+            <div class="floating-nav-wrapper" id="floatingNavWrapper">
+              
+              <!-- Main 3-Tab Pill with Liquid Droplet Lens -->
+              <nav class="liquid-bottom-bar" id="floatingNavBar">
+                <!-- Moving Liquid Aurora Light Wave through Background of Glass Bar -->
+                <div class="navbar-liquid-bg-light" id="navbarLiquidBgLight"></div>
+                
+                <!-- The Signature BeatWave Liquid Jelly Droplet Lens (Realtime Caustics & Apple Transparency) -->
+                <div class="liquid-droplet-lens" id="liquidDropletLens">
+                  <!-- Moving Liquid Light / Internal Fluid Caustics in the Background -->
+                  <div class="droplet-liquid-light-wave" id="dropletLightWave"></div>
+
+                  <!-- Realtime 60FPS Canvas for Dynamic Chromatic Aberration & Edge Caustics -->
+                  <canvas class="droplet-optics-canvas" id="dropletOpticsCanvas" width="228" height="172"></canvas>
+
+                  <!-- 4 Dynamic Corner Specular Caustic Reflections -->
+                  <div class="corner-caustic corner-tl" id="causticTL">
+                    <div class="caustic-flare"></div>
+                  </div>
+                  <div class="corner-caustic corner-tr" id="causticTR">
+                    <div class="caustic-flare"></div>
+                  </div>
+                  <div class="corner-caustic corner-bl" id="causticBL">
+                    <div class="caustic-flare"></div>
+                  </div>
+                  <div class="corner-caustic corner-br" id="causticBR">
+                    <div class="caustic-flare"></div>
+                  </div>
+
+                  <!-- Top Curved Specular Glint Highlight (Follows Cursor) -->
+                  <div class="droplet-meniscus-glint" id="dropletGlint"></div>
+
+                  <!-- Apple-Grade Pure Optical Liquid Glass Core with Inset Bevel & Caustics -->
+                  <div class="droplet-liquid-core" id="dropletCore"></div>
+
+                  <!-- Background Depth Refraction Warp & Optical Dome Layer -->
+                  <div class="droplet-refracted-backdrop" id="dropletRefractedBackdrop">
+                    <div class="lens-depth-shimmer"></div>
+                  </div>
+
+                  <!-- Scaled active tab icon clone inside liquid droplet -->
+                  <div class="puck-icon-sample" id="puckIconSample">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="4" y="3" width="16" height="18" rx="3"/>
+                      <line x1="8" y1="7" x2="16" y2="7"/>
+                      <path d="M10 16a2 2 0 1 0 2-2V10h3"/>
+                    </svg>
+                    <span>Library</span>
+                  </div>
+                </div>
+
+                <!-- Tabs: Home, Library, Settings -->
+                <button class="nav-tab" data-tab="0" id="tabHome">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                  </svg>
+                  <span>Home</span>
+                </button>
+
+                <button class="nav-tab active" data-tab="1" id="tabLibrary">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="4" y="3" width="16" height="18" rx="3"/>
+                    <line x1="8" y1="7" x2="16" y2="7"/>
+                    <path d="M10 16a2 2 0 1 0 2-2V10h3"/>
+                  </svg>
+                  <span>Library</span>
+                </button>
+
+                <button class="nav-tab" data-tab="2" id="tabSettings">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                  </svg>
+                  <span>Settings</span>
+                </button>
+              </nav>
+
+              <!-- Standalone Glass Search Circle Button -->
+              <button class="nav-search-circle" id="navSearchCircle" title="Search">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle cx="11" cy="11" r="7"/>
+                  <line x1="21" y1="21" x2="16" y2="16"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Optional Collapsible Full Player Card (can be opened by tapping mini player) -->
+            <div class="full-player-overlay" id="fullPlayerOverlay">
+              <div class="full-player-header">
+                <button class="close-overlay-btn" id="closeOverlayBtn">✕</button>
+                <span>Now Playing</span>
+                <div style="width: 28px;"></div>
+              </div>
+              <div class="full-player-content">
+                <div class="overlay-art-wrap">
+                  <div class="queen-large-art">
+                    <div class="q-block q-red"></div>
+                    <div class="q-block q-blue"></div>
+                    <div class="q-block q-green"></div>
+                    <div class="q-block q-yellow"></div>
+                  </div>
+                </div>
+                <h3 id="overlayTrackTitle">Under Pressure (...</h3>
+                <p id="overlayArtist">Queen</p>
+                <div class="scrubber-container" style="margin-top: 18px;">
+                  <div class="time-label" id="currentTime">1:42</div>
+                  <div class="glass-slider-track" id="scrubberTrack">
+                    <div class="glass-slider-fill" id="scrubberFill" style="width: 48%;"></div>
+                    <div class="glass-slider-thumb" id="scrubberThumb" style="left: 48%;"></div>
+                  </div>
+                  <div class="time-label" id="duration">4:08</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Glass Parameters Control Panel & Reverse Engineering Breakdown -->
+      <aside class="controls-panel">
+        
+        <!-- Tab Switcher with Liquid Droplet Indicator -->
+        <div class="panel-tabs" id="panelTabsContainer">
+          <div class="panel-tabs-gooey-layer">
+            <div class="panel-tab-puck" id="panelTabPuck"></div>
+            <div class="panel-tab-droplet" id="panelTabDroplet"></div>
+          </div>
+          <button class="panel-tab-btn active" id="tabControls">Shader Inspector</button>
+          <button class="panel-tab-btn" id="tabArchitecture">BeatWave Architecture</button>
+          <button class="panel-tab-btn" id="tabCode">Compose Code</button>
+        </div>
+
+        <!-- Panel 1: Shader Controls -->
+        <div class="panel-content active" id="contentControls">
+          <div class="panel-card">
+            <h3>🎨 Liquid Glass Presets</h3>
+            <div class="preset-chips">
+              <button class="chip active" data-preset="beatwave">BeatWave Liquid</button>
+              <button class="chip" data-preset="apple">Apple Music Frosted</button>
+              <button class="chip" data-preset="crystal">Crystal Prism</button>
+              <button class="chip" data-preset="subtle">Subtle Dark Pill</button>
+            </div>
+          </div>
+
+          <!-- Glass Style Selection -->
+          <div class="panel-card">
+            <h3>✨ Rendering Engine Mode</h3>
+            <div class="mode-selector">
+              <button class="mode-btn active" data-mode="LIQUID">
+                <strong>LIQUID</strong>
+                <span>Refraction + AGSL Rim</span>
+              </button>
+              <button class="mode-btn" data-mode="BLUR">
+                <strong>BLUR</strong>
+                <span>Frosted Backdrop</span>
+              </button>
+              <button class="mode-btn" data-mode="TRANSPARENT">
+                <strong>TINT</strong>
+                <span>Low-end Fallback</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Interactive Sliders -->
+          <div class="panel-card">
+            <h3>🔬 Refraction & Optics Tuning</h3>
+            
+            <div class="control-row">
+              <div class="control-label">
+                <span>Lens Refraction Height</span>
+                <span class="value-display" id="valLensHeight">0.40</span>
+              </div>
+              <input type="range" id="inputLensHeight" min="0" max="1" step="0.01" value="0.4">
+              <span class="control-hint">Curvature of the SDF edge gradient</span>
+            </div>
+
+            <div class="control-row">
+              <div class="control-label">
+                <span>Refraction Amount</span>
+                <span class="value-display" id="valLensAmount">0.60</span>
+              </div>
+              <input type="range" id="inputLensAmount" min="0" max="1" step="0.01" value="0.6">
+              <span class="control-hint">Degree of backdrop ray bending (d * grad)</span>
+            </div>
+
+            <div class="control-row">
+              <div class="control-label">
+                <span>Backdrop Blur Radius</span>
+                <span class="value-display" id="valBlur">24 px</span>
+              </div>
+              <input type="range" id="inputBlur" min="0" max="64" step="1" value="24">
+              <span class="control-hint">Gaussian filter radius applied to background</span>
+            </div>
+
+            <div class="control-row">
+              <div class="control-label">
+                <span>Vibrancy (Saturation Boost)</span>
+                <span class="value-display" id="valVibrancy">1.20x</span>
+              </div>
+              <input type="range" id="inputVibrancy" min="0" max="2" step="0.05" value="1.2">
+              <span class="control-hint">1.0 = normal, 1.5 = vivid backdrop boost</span>
+            </div>
+
+            <div class="control-row">
+              <div class="control-label">
+                <span>Surface Tint Alpha</span>
+                <span class="value-display" id="valOpacity">0.45</span>
+              </div>
+              <input type="range" id="inputOpacity" min="0" max="1" step="0.01" value="0.45">
+              <span class="control-hint">Underlying tint darkness & contrast</span>
+            </div>
+          </div>
+
+          <!-- Advanced Optics -->
+          <div class="panel-card">
+            <h3>🌈 Spectral Optics & Lighting</h3>
+            
+            <div class="toggle-row">
+              <div>
+                <strong>Chromatic Aberration</strong>
+                <p>7-band RGB spectral prism dispersion</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="checkDispersion" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="toggle-row">
+              <div>
+                <strong>Dynamic Light Drift</strong>
+                <p>Oscillates specular rim from 25° to 65°</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="checkLightDrift" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="control-row" style="margin-top: 14px;">
+              <div class="control-label">
+                <span>Specular Rim Intensity</span>
+                <span class="value-display" id="valRimAlpha">0.55</span>
+              </div>
+              <input type="range" id="inputRimAlpha" min="0" max="1" step="0.05" value="0.55">
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 2: Architecture Deep Dive -->
+        <div class="panel-content" id="contentArchitecture">
+          <div class="panel-card doc-card">
+            <h3>🔍 How BeatWave's Liquid Glass Works</h3>
+            <p>BeatWave achieves real-time liquid glass in Android using a 3-layer architecture:</p>
+            
+            <div class="arch-step">
+              <div class="step-num">1</div>
+              <div>
+                <strong>Backdrop Pixel Capture (GraphicsLayer)</strong>
+                <p>Using <code>rememberLayerBackdrop()</code> and Compose 1.7+ <code>GraphicsLayer.record()</code>, the underlying app screen content is rendered into an offscreen RenderNode.</p>
+              </div>
+            </div>
+
+            <div class="arch-step">
+              <div class="step-num">2</div>
+              <div>
+                <strong>Adaptive Resolution Downscaling</strong>
+                <p>Glass is processed at <code>glassResolutionScale</code> (0.30x on high tier, down to 0.18x on low RAM devices). Heavy blur masks the downscaling, saving up to 85% GPU fill rate.</p>
+              </div>
+            </div>
+
+            <div class="arch-step">
+              <div class="step-num">3</div>
+              <div>
+                <strong>AGSL RuntimeShader Refraction Pipeline</strong>
+                <p>Android 13+ (API 33) <code>RuntimeShader</code> evaluates a 2D Signed Distance Field (SDF) of the rounded rectangle, bends rays via <code>circleMap</code>, and disperses 7 light wavelengths.</p>
+              </div>
+            </div>
+
+            <div class="arch-step">
+              <div class="step-num">4</div>
+              <div>
+                <strong>Specular Rim Drift (Lighting Engine)</strong>
+                <p>A drifting specular highlight vector oscillates over 7000ms, producing physical light glints on the pill edges rather than static borders.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel 3: Extracted Kotlin Code -->
+        <div class="panel-content" id="contentCode">
+          <div class="panel-card">
+            <h3>📦 Compose Usage Example</h3>
+            <pre class="code-block"><code>// 1. Mark your screen background:
+val backdrop = rememberLayerBackdrop()
+Box(Modifier.layerBackdrop(backdrop)) {
+    // Screen content (album art, lists, etc.)
+}
+
+// 2. Wrap your floating nav bar or player:
+Box(
+    modifier = Modifier
+        .liquidGlass(
+            backdrop = backdrop,
+            config = GlassEffectConfig(
+                vibrancy = 1.2f,
+                blurRadiusDp = 24f,
+                lensHeight = 0.4f,
+                lensAmount = 0.6f,
+                chromaticAberration = true
+            ),
+            shape = ContinuousRoundedRectangle(50)
+        )
+) {
+    // Nav items or player controls
+}</code></pre>
+          </div>
+        </div>
+
+      </aside>
+    </main>
+  </div>
+
+  <!-- Real APK Evidence & Side-by-Side Comparison Modal -->
+  <div class="apk-compare-modal" id="apkCompareModal">
+    <div class="compare-modal-backdrop" id="compareModalBackdrop"></div>
+    <div class="compare-modal-dialog">
+      <div class="compare-modal-header">
+        <div class="modal-title-wrap">
+          <span class="badge-pill" style="background: rgba(0, 240, 255, 0.15); border-color: rgba(0, 240, 255, 0.4); color: var(--accent-cyan);">Running Live on Android Emulator</span>
+          <h2>Official BeatWave APK vs Studio Implementation</h2>
+          <p>Captured directly from <code>beatwave-v6.1.1-gms.apk</code> (package <code>com.beatwave.music</code>) running on Android API 36</p>
+        </div>
+        <button class="close-modal-btn" id="btnCloseCompareModal">✕</button>
+      </div>
+
+      <div class="compare-modal-tabs">
+        <button class="compare-tab-btn active" data-compare="puck">1. Liquid Lens & Rainbow Dispersion (Mid-Drag)</button>
+        <button class="compare-tab-btn" data-compare="home">2. Home Screen & Discover Carousel</button>
+        <button class="compare-tab-btn" data-compare="library">3. Library Screen & Action Grid</button>
+        <button class="compare-tab-btn" data-compare="settings">4. Settings & Theme Engine</button>
+      </div>
+
+      <div class="compare-modal-body">
+        
+        <!-- Tab 1: Puck -->
+        <div class="compare-view-slide active" id="slideComparePuck">
+          <div class="comparison-dual-cards">
+            <div class="compare-card">
+              <div class="compare-card-badge official-badge">📱 Official BeatWave APK (Running on Android API 36)</div>
+              <div class="compare-img-wrap">
+                <img src="assets/real_apk_puck_held.png" alt="Real APK Liquid Lens Puck Held">
+              </div>
+              <div class="compare-notes">
+                <h4>Empirical APK Features Identified:</h4>
+                <ul>
+                  <li><strong>78dp Protruding Lens:</strong> Puck height is 78dp on a 64dp bar, protruding ~7dp symmetrically top & bottom.</li>
+                  <li><strong>Dual Rainbow Prisms:</strong> Intense spectral chromatic dispersion along both the upper and lower circular arcs.</li>
+                  <li><strong>Optical Magnification:</strong> Underlying cover art and text are refracted and magnified through the lens.</li>
+                  <li><strong>Standalone Search:</strong> 64dp circular squircle button floated to the right of the tab bar.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="compare-card">
+              <div class="compare-card-badge our-badge">✨ Liquid Glass Studio (Replicated 1:1)</div>
+              <div class="compare-preview-embed">
+                <div class="phone-frame theme-peach embedded-preview">
+                  <div class="screen-content" style="height: 480px; position: relative;">
+                    <div style="padding: 16px;">
+                      <h2 style="font-size: 1.8rem; font-weight: 800; color: #3b1812;">Library</h2>
+                      <div class="bw-filter-chips" style="margin-top: 10px;">
+                        <button class="bw-chip active">✓ Playlists</button>
+                        <button class="bw-chip">Songs</button>
+                        <button class="bw-chip">Albums</button>
+                      </div>
+                      <div class="bw-library-grid" style="margin-top: 16px;">
+                        <div class="bw-lib-card"><span class="bw-lib-card-label">Liked</span></div>
+                        <div class="bw-lib-card"><span class="bw-lib-card-label">Downloaded</span></div>
+                        <div class="bw-lib-card"><span class="bw-lib-card-label">My top 50</span></div>
+                        <div class="bw-lib-card"><span class="bw-lib-card-label">Cached</span></div>
+                      </div>
+                    </div>
+
+                    <!-- Floating Bar with Live Expanded Lens -->
+                    <div class="floating-nav-wrapper" style="bottom: 16px; left: 12px; right: 12px;">
+                      <div class="liquid-bottom-bar" style="height: 64px;">
+                        <div class="liquid-droplet-lens active-dragged" style="left: calc(50% - 39px); width: 78px; height: 78px; top: -7px;">
+                          <div class="rainbow-prism-rim"></div>
+                          <div class="lens-specular-glint"></div>
+                          <div class="puck-icon-sample">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H8v-2h4V6h2v4h4v2z"/></svg>
+                            <span>Library</span>
+                          </div>
+                        </div>
+                        <div class="nav-tab"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Home</span></div>
+                        <div class="nav-tab active"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H8v-2h4V6h2v4h4v2z"/></svg><span>Library</span></div>
+                        <div class="nav-tab"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg><span>Settings</span></div>
+                      </div>
+                      <div class="nav-search-circle" style="width: 64px; height: 64px;">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16" y2="16"/></svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="compare-notes">
+                <h4>Implementation Details:</h4>
+                <ul>
+                  <li>Exact 78px height squircle lens over 64px bottom bar.</li>
+                  <li>Real-time conic and radial chromatic dispersion masking mimicking AGSL shader.</li>
+                  <li>Interactive drag physics with velocity stretching and spring settlement.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Home -->
+        <div class="compare-view-slide" id="slideCompareHome">
+          <div class="comparison-dual-cards">
+            <div class="compare-card">
+              <div class="compare-card-badge official-badge">📱 Official BeatWave APK Home Screen</div>
+              <div class="compare-img-wrap">
+                <img src="assets/real_apk_home.png" alt="Real APK Home Screen">
+              </div>
+            </div>
+            <div class="compare-card">
+              <div class="compare-card-badge our-badge">✨ Studio Home Re-creation</div>
+              <div class="compare-notes">
+                <h4>Faithfully Replicated Sections:</h4>
+                <ul>
+                  <li><strong>Brand Header:</strong> Thin geometric "BeatWave" logo typography and settings gear shortcut.</li>
+                  <li><strong>Time-of-Day Greeting:</strong> "Good afternoon" with "AFTERNOON MIX" equalizer tag and profile avatar.</li>
+                  <li><strong>Horizontal Filter Pills:</strong> "✓ All", "Podcasts", "Romance", "Relax", "Feel good".</li>
+                  <li><strong>Netflix Hero Discover Card:</strong> "Mismatched - Kho Gaye" with frosted glass info card and round play orb.</li>
+                  <li><strong>Trending Playlists:</strong> Curated community playlist cards.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Library -->
+        <div class="compare-view-slide" id="slideCompareLibrary">
+          <div class="comparison-dual-cards">
+            <div class="compare-card">
+              <div class="compare-card-badge official-badge">📱 Official BeatWave APK Library Screen</div>
+              <div class="compare-img-wrap">
+                <img src="assets/real_apk_library.png" alt="Real APK Library Screen">
+              </div>
+            </div>
+            <div class="compare-card">
+              <div class="compare-card-badge our-badge">✨ Studio Library Re-creation</div>
+              <div class="compare-notes">
+                <h4>Faithfully Replicated Elements:</h4>
+                <ul>
+                  <li><strong>Pills:</strong> "Playlists", "Songs", "Albums".</li>
+                  <li><strong>Sort Bar:</strong> "Date added" dropdown, "0 playlists" counter, List/Grid toggle.</li>
+                  <li><strong>Quick Access Cards:</strong> Liked, Downloaded, My top 50, Cached, Uploaded with matching rounded squircle geometry.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Settings -->
+        <div class="compare-view-slide" id="slideCompareSettings">
+          <div class="comparison-dual-cards">
+            <div class="compare-card">
+              <div class="compare-card-badge official-badge">📱 Official BeatWave APK Settings Screen</div>
+              <div class="compare-img-wrap">
+                <img src="assets/real_apk_settings.png" alt="Real APK Settings Screen">
+              </div>
+            </div>
+            <div class="compare-card">
+              <div class="compare-card-badge our-badge">✨ Studio Theme Settings Re-creation</div>
+              <div class="compare-notes">
+                <h4>Theme Customization System:</h4>
+                <ul>
+                  <li><strong>Signature Blush Theme:</strong> Authentic warm peach background (<code>#FFF1EE</code>) with frosted white glass cards.</li>
+                  <li><strong>Deep Midnight OLED Theme:</strong> OLED pitch black (<code>#000000</code>) with dark glass chrome.</li>
+                  <li><strong>Instant Live Toggle:</strong> Switch between themes anytime with 1 click in the top nav or settings!</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
